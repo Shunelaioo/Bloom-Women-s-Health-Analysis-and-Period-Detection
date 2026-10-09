@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 97%;
+    --foreground: 340 34% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 340 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 340 30% 15%;
+
+    --primary: 340 65% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 280 25% 88%;
+    --secondary-foreground: 280 42% 24%;
+
+    --muted: 340 16% 91%;
+    --muted-foreground: 340 20% 34%;
+
+    --accent: 15 85% 70%;
+    --accent-foreground: 15 80% 20%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 340 20% 84%;
+    --input: 340 20% 84%;
+    --ring: 340 65% 65%;
+
+    --radius: 1rem;
+
+    /* Custom tokens */
+    --rose-light: 340 45% 92%;
+    --rose-medium: 340 55% 80%;
+    --coral: 15 85% 70%;
+    --lavender: 280 40% 85%;
+    --lavender-dark: 280 35% 50%;
+    --sage: 150 25% 75%;
+    --cream: 40 40% 97%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(340 65% 65%), hsl(15 85% 70%));
+    --gradient-soft: linear-gradient(180deg, hsl(340 45% 92%), hsl(0 0% 98%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(340 16% 95%));
+    --gradient-accent: linear-gradient(135deg, hsl(280 40% 85%), hsl(340 65% 85%));
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(340 65% 65% / 0.15);
+    --shadow-card: 0 8px 32px -8px hsl(340 30% 50% / 0.12);
+    --shadow-elevated: 0 16px 48px -12px hsl(340 30% 50% / 0.18);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 340 20% 8%;
+    --foreground: 340 20% 95%;
+
+    --card: 340 20% 12%;
+    --card-foreground: 340 20% 95%;
+
+    --popover: 340 20% 12%;
+    --popover-foreground: 340 20% 95%;
+
+    --primary: 340 60% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 280 25% 20%;
+    --secondary-foreground: 280 30% 90%;
+
+    --muted: 340 15% 20%;
+    --muted-foreground: 340 16% 72%;
+
+    --accent: 15 70% 55%;
+    --accent-foreground: 15 80% 95%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 340 15% 20%;
+    --input: 340 15% 20%;
+    --ring: 340 60% 60%;
+
+    --rose-light: 340 30% 18%;
+    --rose-medium: 340 40% 30%;
+    --coral: 15 60% 50%;
+    --lavender: 280 30% 30%;
+    --lavender-dark: 280 35% 60%;
+    --sage: 150 20% 30%;
+    --cream: 40 20% 15%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(340 60% 50%), hsl(15 70% 55%));
+    --gradient-soft: linear-gradient(180deg, hsl(340 20% 12%), hsl(340 20% 8%));
+    --gradient-card: linear-gradient(145deg, hsl(340 20% 14%), hsl(340 20% 10%));
+    --gradient-accent: linear-gradient(135deg, hsl(280 30% 30%), hsl(340 40% 30%));
+
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-card: 0 8px 32px -8px hsl(0 0% 0% / 0.4);
+    --shadow-elevated: 0 16px 48px -12px hsl(0 0% 0% / 0.5);
+  }
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-soft {
+    background: var(--gradient-soft);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-lg bg-card/90 border border-border/70 rounded-2xl shadow-card;
+  }
+
+  .btn-primary {
+    @apply gradient-primary text-primary-foreground font-medium px-6 py-3 rounded-xl shadow-soft transition-all duration-300 hover:shadow-elevated hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .stat-card {
+    @apply glass-card p-6 transition-all duration-300 hover:shadow-elevated hover:-translate-y-1;
+  }
+}

@@ -1,0 +1,93 @@
+Cycle Companion ML Service
+--------------------------
+
+Architecture (2-model setup)
+- Model A: Multi-label classifier for menstrual risk screening.
+- Model B: Next-period regressor for cycle length + next date + phase timeline.
+- Separation rule:
+  - Classifier features live in server/src/utils/modelFeatures.js
+  - Regressor payload builder lives in server/src/utils/periodServicePayload.js
+  - Classifier endpoints stay in /predict flow
+  - Regressor endpoints use /period-predict (legacy /predict-next-period kept for compatibility)
+
+Model A: Classifier
+- Model file env: MODEL_PATH
+- Default path: C:\Users\Shune\Downloads\menstrual_multioutput_rf.joblib
+- Endpoint:
+  - POST /predict
+- Input fields:
+  - age
+  - bmi
+  - life_stage
+  - tracking_duration_months
+  - pain_score
+  - avg_cycle_length
+  - cycle_length_variation
+  - avg_bleeding_days
+  - bleeding_volume_score
+  - intermenstrual_episodes
+  - cycle_variation_coeff
+  - pattern_disruption_score
+  - duration_abnormality_flag
+- Output:
+  - predictions: [{ label, probability, positive, threshold }, ...]
+
+Model B: Next-period regressor
+- Model file env: NEXT_PERIOD_MODEL_PATH
+- Default path: server/ml/period_service/next_period_predictor_bundle_sklearn161.pkl
+- Endpoint:
+  - POST /period-predict
+  - POST /predict-next-period (legacy compatibility)
+- Health:
+  - GET /health/next-period
+- Input fields:
+  - prev_cycle_len
+  - avg_3_cycles
+  - prev_avg_stress
+  - prev_avg_sleep
+  - prev_total_cals
+  - prev_sleep_missing_rate
+  - prev_stress_missing_rate
+  - prev_ex_missing_rate
+  - prev_avg_cramps
+  - prev_avg_sorebreasts
+  - prev_avg_fatigue
+  - prev_avg_moodswing
+  - bmi
+  - bmi_missing
+  - age
+  - menarche_age
+- Optional request fields:
+  - current_cycle_start (YYYY-MM-DD)
+  - menstruation_days (1..14)
+- Output:
+  - predicted_cycle_length_raw
+  - predicted_cycle_length_days
+  - predicted_next_period_date
+  - phase_dates:
+    - menstruation { start, end }
+    - follicular { start, end } | null
+    - ovulation { date }
+    - luteal { start, end } | null
+
+Node API wiring
+- Classifier bridge:
+  - GET /api/daily-entries/model-predictions
+- Regressor bridge:
+  - GET /api/daily-entries/period-predictions
+  - GET /api/next-period/features
+  - GET /api/next-period/prediction
+
+Run locally (from repo root)
+1) Install Python deps:
+   .venv\Scripts\python -m pip install -r server\ml\requirements.txt
+2) Start ML service (from server/):
+   npm run ml:serve
+3) Start Express API (from server/):
+   npm run dev
+4) Frontend (repo root):
+   npm run dev
+
+Notes
+- Regressor route builds all inputs from daily entries + profile + cycle settings.
+- If next-period model file is missing, /health/next-period returns load_error and prediction routes return 503.

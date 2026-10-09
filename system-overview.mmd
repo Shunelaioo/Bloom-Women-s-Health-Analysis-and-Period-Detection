@@ -1,0 +1,81 @@
+﻿%%{init: {'theme':'base','flowchart': {'curve':'linear'},'themeCSS': 'svg { background-color: #ffffff !important; } .background { fill: #ffffff !important; }','themeVariables': {
+  'background':'#ffffff',
+  'primaryColor':'#f8fafc',
+  'primaryTextColor':'#0f172a',
+  'primaryBorderColor':'#334155',
+  'lineColor':'#475569',
+  'fontFamily':'Arial'
+}}}%%
+
+flowchart TB
+  %% ---------------- Auth ----------------
+  S([Start]) --> OPEN[Open Cycle Companion]
+  OPEN --> ACC{Already registered?}
+
+  ACC -- No --> REG[Register Account]
+  REG --> VERIFY[Verify Email]
+  VERIFY --> LOGIN[Login]
+
+  ACC -- Yes --> LOGIN
+  LOGIN --> AUTH{Credentials valid?}
+  AUTH -- No --> AUTHERR[Show Login Error]
+  AUTHERR --> LOGIN
+  AUTH -- Yes --> HOME[Home Dashboard]
+
+  %% ---------------- Home Branches ----------------
+  HOME --> TRACK[Daily Tracking]
+  HOME --> INSIGHTS[View Insights]
+  HOME --> HISTORY[View History]
+  HOME --> CHAT[Open Chatbot]
+  HOME --> NOTIF[Open Notifications]
+  HOME --> PROFILE[Update Profile]
+  HOME --> LOGOUT[Logout]
+
+  %% ---------------- Tracking ----------------
+  TRACK --> FILL[/Enter flow, pain, mood, sleep,\nexercise, symptoms/]
+  FILL --> SAVE[Save via API]
+  SAVE --> MONGO_T[(MongoDB)]
+  MONGO_T --> PRED[Run ML: /irregular-pattern-predict + /period-predict]
+
+  %% ---------------- Insights ----------------
+  INSIGHTS --> INS_LOAD[Load insights + model predictions]
+  INS_LOAD --> INS_VIEW[Show personalized insights]
+
+  %% ---------------- History ----------------
+  HISTORY --> HIS_LOAD[Load logged entries]
+  HIS_LOAD --> HIS_VIEW[Show trends, charts, calendar]
+
+  %% ---------------- Chatbot ----------------
+  CHAT --> ASK[/Ask cycle-related question/]
+  ASK --> EDGE[Supabase Edge Function]
+  EDGE --> GEMINI[Gemini Model]
+  GEMINI --> CHAT_VIEW[Show streamed response]
+
+  %% ---------------- Notifications ----------------
+  NOTIF --> NOTIF_LOAD[Fetch reminders + alerts]
+  NOTIF_LOAD --> MONGO_N[(MongoDB)]
+  MONGO_N --> NOTIF_VIEW[Show daily reminder,\nred flags, weekly summary]
+
+  %% ---------------- Profile ----------------
+  PROFILE --> PROFILE_SAVE[Save profile + cycle settings]
+  PROFILE_SAVE --> MONGO_P[(MongoDB)]
+  MONGO_P --> PROFILE_OUT[Settings updated]
+
+  %% ---------------- Logout ----------------
+  LOGOUT --> E([End])
+
+  classDef startend fill:#f1f5f9,stroke:#0f172a,stroke-width:1.5px,color:#0f172a;
+  classDef decision fill:#fef3c7,stroke:#a16207,stroke-width:1.5px,color:#78350f;
+  classDef process fill:#e0f2fe,stroke:#0369a1,stroke-width:1.2px,color:#0c4a6e;
+  classDef input fill:#dcfce7,stroke:#15803d,stroke-width:1.2px,color:#14532d;
+  classDef data fill:#ede9fe,stroke:#6d28d9,stroke-width:1.2px,color:#4c1d95;
+  classDef ai fill:#ffe4e6,stroke:#be123c,stroke-width:1.2px,color:#881337;
+
+  class S,E startend;
+  class ACC,AUTH decision;
+  class OPEN,REG,VERIFY,LOGIN,AUTHERR,HOME,TRACK,INSIGHTS,HISTORY,CHAT,NOTIF,PROFILE,LOGOUT process;
+  class FILL,ASK input;
+  class MONGO_T,MONGO_N,MONGO_P,SAVE,PRED,INS_LOAD,INS_VIEW,HIS_LOAD,HIS_VIEW,NOTIF_LOAD,NOTIF_VIEW,PROFILE_SAVE,PROFILE_OUT data;
+  class EDGE,GEMINI,CHAT_VIEW ai;
+
+
